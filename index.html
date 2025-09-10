@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    
+    <!-- PWA Meta Tags -->
+    <title>PhotoVideo Studio - 사진으로 동영상 만들기</title>
+    <meta name="description" content="사진과 음악으로 멋진 동영상을 만들어보세요. 무료로 사용할 수 있는 사진-동영상 제작 앱입니다." />
+    <meta name="keywords" content="사진, 동영상, 편집, 음악, PWA, 앱" />
+    <meta name="author" content="PhotoVideo Studio" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- PWA Theme Colors -->
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
+    <meta name="msapplication-navbutton-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- PWA App Configuration -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="PhotoVideo" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="PhotoVideo Studio" />
+    
+    <!-- App Icons -->
+    <link rel="icon" type="image/x-icon" href="/icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PhotoVideo Studio" />
+    <meta property="og:description" content="사진과 음악으로 멋진 동영상을 만들어보세요" />
+    <meta property="og:image" content="/icons/icon-512x512.png" />
+    <meta property="og:url" content="https://username.github.io/photovideo-studio" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PhotoVideo Studio" />
+    <meta name="twitter:description" content="사진과 음악으로 멋진 동영상을 만들어보세요" />
+    <meta name="twitter:image" content="/icons/icon-512x512.png" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-CCWyTqx1.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CTYZY_E6.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+      
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install button or banner
+        const installBanner = document.createElement('div');
+        installBanner.style.cssText = `
+          position: fixed; top: 10px; right: 10px; 
+          background: #6366f1; color: white; 
+          padding: 10px 20px; border-radius: 8px; 
+          cursor: pointer; z-index: 1000;
+          font-family: 'Inter', sans-serif;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        installBanner.textContent = '📱 앱 설치하기';
+        installBanner.onclick = () => {
+          installBanner.remove();
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            deferredPrompt = null;
+          });
+        };
+        document.body.appendChild(installBanner);
+        
+        // Auto remove after 10 seconds
+        setTimeout(() => {
+          if (installBanner.parentNode) {
+            installBanner.remove();
+          }
+        }, 10000);
+      });
+    </script>
+    
+  </body>
+</html>
